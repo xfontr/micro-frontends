@@ -1,11 +1,9 @@
-import { useState } from "react";
 import { GameState, GameStateProvider } from "../types/gameState";
 import { COMPUTER } from "../configs/globals";
-import stateSetter from "../utils/stateSetter";
+import useState from "./useState";
 
 const useGameState = (): GameStateProvider => {
-    const [gameState, setter] = useState<GameState>({} as GameState);
-    const setGameState = stateSetter(setter);
+    const [gameState, setGameState] = useState<GameState>({} as GameState);
 
     const getGameState = (): GameState => JSON.parse(JSON.stringify(gameState));
 
