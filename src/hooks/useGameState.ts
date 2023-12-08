@@ -1,28 +1,28 @@
 import { useState } from "react";
-import { FullBoard, GameState, GameStateProvider } from "../types/gameState";
+import { GameState, GameStateProvider } from "../types/gameState";
 import { COMPUTER } from "../configs/globals";
+import stateSetter from "../utils/stateSetter";
 
 const useGameState = (): GameStateProvider => {
-    const [gameState, setGameState] = useState<GameState>({} as GameState);
+    const [gameState, setter] = useState<GameState>({} as GameState);
+    const setGameState = stateSetter(setter);
 
     const getGameState = (): GameState => JSON.parse(JSON.stringify(gameState));
 
     const setGameStatus: GameStateProvider["setGameStatus"] = (status) => {
-        setGameState((state) => ({
-            ...state,
+        setGameState({
             status: status,
-        }));
+        });
     };
 
     const setGamePlayers: GameStateProvider["setGamePlayers"] = (x, o) => {
-        setGameState((state) => ({
-            ...state,
+        setGameState({
             players: {
                 x,
                 o: o ?? COMPUTER,
             },
             againstComputer: !!o,
-        }));
+        });
     };
 
     const saveRound: GameStateProvider["saveRound"] = (
@@ -31,7 +31,6 @@ const useGameState = (): GameStateProvider => {
         winner
     ) => {
         setGameState((state) => ({
-            ...state,
             rounds: [
                 ...state.rounds,
                 {
@@ -45,14 +44,13 @@ const useGameState = (): GameStateProvider => {
     };
 
     const resetBoard: GameStateProvider["resetBoard"] = () => {
-        setGameState((state) => ({
-            ...state,
+        setGameState({
             board: [
                 [undefined, undefined, undefined],
                 [undefined, undefined, undefined],
                 [undefined, undefined, undefined],
             ],
-        }));
+        });
     };
 
     const updateBoardCell: GameStateProvider["updateBoardCell"] = (
@@ -63,15 +61,13 @@ const useGameState = (): GameStateProvider => {
         const board = getGameState().board;
         board[locationY][locationX] = player;
 
-        setGameState((state) => ({
-            ...state,
+        setGameState({
             board,
-        }));
+        });
     };
 
     const nextTurn: GameStateProvider["nextTurn"] = () => {
         setGameState((state) => ({
-            ...state,
             currentPlayer: state.currentPlayer === "X" ? "O" : "X",
         }));
     };
