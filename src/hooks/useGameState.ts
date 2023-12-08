@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { GameState, GameStateProvider } from "../types/gameState";
+import { FullBoard, GameState, GameStateProvider } from "../types/gameState";
 import { COMPUTER } from "../configs/globals";
 
 const useGameState = (): GameStateProvider => {
@@ -44,10 +44,35 @@ const useGameState = (): GameStateProvider => {
         }));
     };
 
+    const resetBoard: GameStateProvider["resetBoard"] = () => {
+        setGameState((state) => ({
+            ...state,
+            board: [
+                [undefined, undefined, undefined],
+                [undefined, undefined, undefined],
+                [undefined, undefined, undefined],
+            ],
+        }));
+    };
+
+    const updateBoardCell: GameStateProvider["updateBoardCell"] = (
+        locationX,
+        locationY,
+        player
+    ) => {
+        const board = getGameState().board;
+        board[locationY][locationX] = player;
+
+        setGameState((state) => ({
+            ...state,
+            board,
+        }));
+    };
+
     const nextTurn: GameStateProvider["nextTurn"] = () => {
         setGameState((state) => ({
             ...state,
-            currentLetter: state.currentLetter === "X" ? "O" : "X",
+            currentPlayer: state.currentPlayer === "X" ? "O" : "X",
         }));
     };
 
@@ -57,6 +82,8 @@ const useGameState = (): GameStateProvider => {
         setGamePlayers,
         saveRound,
         nextTurn,
+        updateBoardCell,
+        resetBoard,
     };
 };
 
