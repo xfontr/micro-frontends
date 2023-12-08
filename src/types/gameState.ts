@@ -40,5 +40,5 @@ export type GameStateProvider = {
         locationY: number,
         player: "X" | "O"
     ) => void;
-    resetBoard: () => void;
+    setBoard: (board?: FullBoard) => void;
 };

@@ -41,13 +41,15 @@ const useGameState = (): GameStateProvider => {
         }));
     };
 
-    const resetBoard: GameStateProvider["resetBoard"] = () => {
+    const setBoard: GameStateProvider["setBoard"] = (board) => {
         setGameState({
-            board: [
-                [undefined, undefined, undefined],
-                [undefined, undefined, undefined],
-                [undefined, undefined, undefined],
-            ],
+            board: board
+                ? board
+                : [
+                      [undefined, undefined, undefined],
+                      [undefined, undefined, undefined],
+                      [undefined, undefined, undefined],
+                  ],
         });
     };
 
@@ -77,7 +79,7 @@ const useGameState = (): GameStateProvider => {
         saveRound,
         nextTurn,
         updateBoardCell,
-        resetBoard,
+        setBoard,
     };
 };
 
