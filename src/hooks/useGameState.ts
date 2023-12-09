@@ -1,11 +1,15 @@
 import { GameState, GameStateProvider } from "../types/gameState";
 import { COMPUTER } from "../configs/globals";
 import useState from "./useState";
+import { useCallback } from "react";
 
-const useGameState = (): GameStateProvider => {
-    const [gameState, setGameState] = useState<GameState>({} as GameState);
+const useGameState = (initialState: GameState): GameStateProvider => {
+    const [gameState, setGameState] = useState<GameState>(initialState);
 
-    const getGameState = (): GameState => JSON.parse(JSON.stringify(gameState));
+    const getGameState = useCallback(
+        () => JSON.parse(JSON.stringify(gameState)),
+        [gameState]
+    );
 
     const setGameStatus: GameStateProvider["setGameStatus"] = (status) => {
         setGameState({
@@ -41,7 +45,7 @@ const useGameState = (): GameStateProvider => {
         }));
     };
 
-    const setBoard: GameStateProvider["setBoard"] = (board) => {
+    const setBoard: GameStateProvider["setBoard"] = useCallback((board) => {
         setGameState({
             board: board
                 ? board
@@ -51,7 +55,7 @@ const useGameState = (): GameStateProvider => {
                       [undefined, undefined, undefined],
                   ],
         });
-    };
+    }, []);
 
     const updateBoardCell: GameStateProvider["updateBoardCell"] = (
         locationX,
